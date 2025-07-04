@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserServices {
       Users user = userOptional.get();
       userDetails.setName(user.getFullName());
       userDetails.setPassword(user.getPasswordHash());
-      userDetails.setType(UserType.user);
+      userDetails.setRole(user.getRole());
     }
 
     return userDetails;

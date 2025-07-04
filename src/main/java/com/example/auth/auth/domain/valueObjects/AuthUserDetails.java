@@ -17,11 +17,11 @@ import java.util.List;
 public class AuthUserDetails implements UserDetails {
   private String name;
   private String password;
-  private UserType type;
+  private String role;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return List.of(new SimpleGrantedAuthority("ROLE_" + getType()));
+    return List.of(new SimpleGrantedAuthority("ROLE_" + role.toUpperCase()));
   }
 
   @Override

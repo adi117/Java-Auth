@@ -1,6 +1,7 @@
 package com.example.auth.auth.infrastructure.security;
 
 import com.example.auth.auth.aplication.UserServices;
+import com.example.auth.auth.infrastructure.security.filter.BlackListTokenFilter;
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
@@ -33,11 +34,13 @@ public class SecurityConfig {
   private final UserServices userServices;
   private final PasswordEncoder passwordEncoder;
   private final JwtConfigProperties jwtConfigProperties;
+  private final BlackListTokenFilter blackListTokenFilter;
 
-  public SecurityConfig (UserServices userServices, PasswordEncoder passwordEncoder, JwtConfigProperties jwtConfigProperties){
+  public SecurityConfig (UserServices userServices, PasswordEncoder passwordEncoder, JwtConfigProperties jwtConfigProperties, BlackListTokenFilter blackListTokenFilter){
     this.userServices = userServices;
     this.passwordEncoder = passwordEncoder;
     this.jwtConfigProperties = jwtConfigProperties;
+    this.blackListTokenFilter = blackListTokenFilter;
   }
 
   @Bean
@@ -55,10 +58,11 @@ public class SecurityConfig {
         .cors(cors -> cors.configurationSource(new CorsConfigurationImpl()))
         .authorizeHttpRequests(auth -> auth
 //            allow public endpoint
-            .requestMatchers("/api/v1/public/**").permitAll()
-            .anyRequest().authenticated()
+                .requestMatchers("/api/v1/public/**").permitAll()
+                .anyRequest().authenticated()
         )
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//        .addFilterBefore(blackListTokenFilter, BearerTokenAuthenticationFilter.class)
         .oauth2ResourceServer(oauth2 -> {
           oauth2.jwt(jwt -> jwt.decoder(jwtDecoder()));
           oauth2.bearerTokenResolver(ExtractTokenHelper::getTokenFromRequest);

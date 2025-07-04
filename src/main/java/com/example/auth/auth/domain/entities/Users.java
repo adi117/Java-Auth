@@ -31,7 +31,7 @@ public class Users {
   private String fullName;
 
   @Column(name = "role")
-  private String role = "user";
+  private String role;
 
   @Column(name = "created_at")
   private Instant createdAt;
@@ -46,6 +46,7 @@ public class Users {
   public void prePersist() {
     this.createdAt = Instant.now();
     this.updatedAt = Instant.now();
+    this.role = "user";
   }
 
   @PreUpdate
