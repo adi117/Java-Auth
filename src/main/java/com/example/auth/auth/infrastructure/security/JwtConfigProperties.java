@@ -7,4 +7,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Data
 public class JwtConfigProperties {
   private String secret;
+  private String refreshSecret;
 }

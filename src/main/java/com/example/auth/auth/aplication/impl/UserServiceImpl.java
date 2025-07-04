@@ -60,4 +60,16 @@ public class UserServiceImpl implements UserServices {
 
     return userDetails;
   }
+
+  @Override
+  public Users getProfile(Integer id) {
+    Optional<Users> usersOptional = userRepository.findById(id);
+    if (usersOptional.isPresent()) {
+      Users user = usersOptional.get();
+      user.setPasswordHash(null);
+      return user;
+    } else {
+      throw new UsernameNotFoundException("User not found!");
+    }
+  }
 }

@@ -7,4 +7,5 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 public interface UserServices extends UserDetailsService {
   Users registerUser(RegisterRequest request);
   Users getUserByEmail(String email);
+  Users getProfile(Integer id);
 }
