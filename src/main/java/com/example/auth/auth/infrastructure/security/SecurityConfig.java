@@ -67,26 +67,26 @@ public class SecurityConfig {
         .build();
   }
 
-  @Bean
+  @Bean(name = "jwtDecoder")
   public JwtDecoder jwtDecoder() {
     SecretKey secretKey = new SecretKeySpec(jwtConfigProperties.getSecret().getBytes(), "HmacSHA256");
     return NimbusJwtDecoder.withSecretKey(secretKey).build();
   }
 
-  @Bean
+  @Bean(name = "jwtEncoder")
   public JwtEncoder jwtEncoder() {
     SecretKey secretKey = new SecretKeySpec(jwtConfigProperties.getSecret().getBytes(), "HmacSHA256");
     JWKSource<SecurityContext> immutableSecret = new ImmutableSecret<SecurityContext>(secretKey);
     return new NimbusJwtEncoder(immutableSecret);
   }
 
-  @Bean
+  @Bean(name = "refreshTokenDecoder")
   public JwtDecoder refreshTokenDecoder() {
     SecretKey refreshSecretKey = new SecretKeySpec(jwtConfigProperties.getRefreshSecret().getBytes(), "HmacSHA256");
     return NimbusJwtDecoder.withSecretKey(refreshSecretKey).build();
   }
 
-  @Bean
+  @Bean(name = "refreshTokenEncoder")
   public JwtEncoder refreshTokenEncoder() {
     SecretKey refreshSecretKey = new SecretKeySpec(jwtConfigProperties.getRefreshSecret().getBytes(), "HmacSHA256");
     JWKSource<SecurityContext> immutableRefreshSecret = new ImmutableSecret<SecurityContext>(refreshSecretKey);

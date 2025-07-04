@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -39,12 +40,14 @@ public class UserServiceImpl implements UserServices {
   }
 
   @Override
+  @Transactional(readOnly = true)
   public Users getUserByEmail(String email) {
     Optional<Users> usersOptional = userRepository.findByEmail(email);
     return usersOptional.orElse(null);
   }
 
   @Override
+  @Transactional(readOnly = true)
   public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
     Optional<Users> userOptional = userRepository.findByEmail(email);
@@ -62,6 +65,7 @@ public class UserServiceImpl implements UserServices {
   }
 
   @Override
+  @Transactional(readOnly = true)
   public Users getProfile(Integer id) {
     Optional<Users> usersOptional = userRepository.findById(id);
     if (usersOptional.isPresent()) {
