@@ -25,7 +25,9 @@ public class AuthServiceImpl implements AuthServices {
       Authentication loginResult = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
       String scope = loginResult.getAuthorities().stream().map(GrantedAuthority::getAuthority).reduce((a, b) -> a + " " + b).orElse("");
       return LoginResponse.builder()
+//          create access token
           .accessToken(tokenGeneratorService.generateAccessToken(email, scope))
+//          create refresh token
           .refreshToken(tokenGeneratorService.generateRefreshToken(email))
           .build();
     } catch (Exception e) {

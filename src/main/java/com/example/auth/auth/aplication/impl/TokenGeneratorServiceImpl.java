@@ -35,6 +35,7 @@ public class TokenGeneratorServiceImpl implements TokenGeneratorService {
 
     Instant now = Instant.now();
 
+//    set the access token for 1 hour
     long ACCESS_TOKEN_EXPIRATION_TIME = 3600L;
     Instant expiresAt = now.plusSeconds(ACCESS_TOKEN_EXPIRATION_TIME);
 
@@ -61,7 +62,7 @@ public class TokenGeneratorServiceImpl implements TokenGeneratorService {
     Jwt decodedToken = refreshTokenDecoder.decode(refreshToken);
 
     if (decodedToken == null){
-      throw new IllegalArgumentException("invalid token!");
+      throw new IllegalArgumentException("Invalid token!");
     }
 
 //    check if token is expired
@@ -72,7 +73,7 @@ public class TokenGeneratorServiceImpl implements TokenGeneratorService {
     String kind = decodedToken.getClaimAsString("kind");
     Integer userId = Integer.parseInt(decodedToken.getSubject());
     if (!kind.equals(TokenType.REFRESH.getType())) {
-      throw new IllegalArgumentException("Invalid token type");
+      throw new IllegalArgumentException("Invalid token type!");
     }
     Users user  = userServices.getProfile(userId);
     String scopes = user.getRole();

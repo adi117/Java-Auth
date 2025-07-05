@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserServices {
     Optional<Users> usersOptional = userRepository.findByEmail(request.getEmail());
 
     if (usersOptional.isPresent()) {
-      throw new RuntimeException("Already registered user with same email");
+      throw new RuntimeException("Already registered user with same email!");
     }
 
     Users users = request.toUsers();
