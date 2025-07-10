@@ -6,6 +6,7 @@ import com.example.auth.auth.presentation.dtos.LoginResponse;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
@@ -30,8 +31,8 @@ public class AuthServiceImpl implements AuthServices {
 //          create refresh token
           .refreshToken(tokenGeneratorService.generateRefreshToken(email))
           .build();
-    } catch (Exception e) {
-      throw new RuntimeException("Login failed:" + e.getMessage());
+    } catch (AuthenticationException ex) {
+      throw new RuntimeException("Wrong email or password");
     }
   }
 

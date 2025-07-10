@@ -26,7 +26,11 @@ public class UserServiceImpl implements UserServices {
 
   @Override
   public Users registerUser(RegisterRequest request) {
-    Optional<Users> usersOptional = userRepository.findByEmail(request.getEmail());
+
+//    make the username become email for db checking
+    String emailRequest = request + "@adisain.in";
+
+    Optional<Users> usersOptional = userRepository.findByEmail(emailRequest);
 
     if (usersOptional.isPresent()) {
       throw new RuntimeException("Already registered user with same email!");

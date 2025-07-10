@@ -2,6 +2,7 @@ package com.example.auth.auth.infrastructure.security;
 
 import com.example.auth.auth.aplication.UserServices;
 import com.example.auth.auth.infrastructure.security.filter.BlackListTokenFilter;
+import com.example.auth.common.CustomAuthenticationEntryPoint;
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
@@ -35,12 +36,14 @@ public class SecurityConfig {
   private final PasswordEncoder passwordEncoder;
   private final JwtConfigProperties jwtConfigProperties;
   private final BlackListTokenFilter blackListTokenFilter;
+  private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
-  public SecurityConfig (UserServices userServices, PasswordEncoder passwordEncoder, JwtConfigProperties jwtConfigProperties, BlackListTokenFilter blackListTokenFilter){
+  public SecurityConfig (UserServices userServices, PasswordEncoder passwordEncoder, JwtConfigProperties jwtConfigProperties, BlackListTokenFilter blackListTokenFilter, CustomAuthenticationEntryPoint customAuthenticationEntryPoint){
     this.userServices = userServices;
     this.passwordEncoder = passwordEncoder;
     this.jwtConfigProperties = jwtConfigProperties;
     this.blackListTokenFilter = blackListTokenFilter;
+    this.customAuthenticationEntryPoint = customAuthenticationEntryPoint;
   }
 
   @Bean
@@ -62,10 +65,10 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
         )
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//        .addFilterBefore(blackListTokenFilter, BearerTokenAuthenticationFilter.class)
         .oauth2ResourceServer(oauth2 -> {
           oauth2.jwt(jwt -> jwt.decoder(jwtDecoder()));
           oauth2.bearerTokenResolver(ExtractTokenHelper::getTokenFromRequest);
+          oauth2.authenticationEntryPoint(customAuthenticationEntryPoint);
         })
         .userDetailsService(userServices)
         .build();

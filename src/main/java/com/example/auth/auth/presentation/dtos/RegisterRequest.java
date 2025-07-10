@@ -10,13 +10,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RegisterRequest {
   private String name;
-  private String email;
+  private String username;
   private String password;
 
   public Users toUsers() {
     return Users.builder()
         .fullName(name)
-        .email(email)
+        .email(username + "@adisain.in")
         .build();
   }
 }
