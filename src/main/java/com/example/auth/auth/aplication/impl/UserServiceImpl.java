@@ -6,6 +6,7 @@ import com.example.auth.auth.domain.enums.UserType;
 import com.example.auth.auth.domain.valueObjects.AuthUserDetails;
 import com.example.auth.auth.infrastructure.repositories.UserRepository;
 import com.example.auth.auth.presentation.dtos.RegisterRequest;
+import com.example.auth.auth.presentation.dtos.RegisterResponse;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,7 +26,7 @@ public class UserServiceImpl implements UserServices {
   }
 
   @Override
-  public Users registerUser(RegisterRequest request) {
+  public RegisterResponse registerUser(RegisterRequest request) {
 
     Optional<Users> usersOptional = userRepository.findByEmail(request.getEmail());
 
@@ -37,7 +38,9 @@ public class UserServiceImpl implements UserServices {
 
     users.setPasswordHash(passwordEncoder.encode(request.getPassword()));
 
-    return userRepository.save(users);
+    userRepository.save(users); // save user to DB
+
+    return RegisterResponse.toResponse(users);
   }
 
   @Override
